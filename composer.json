@@ -1,0 +1,17 @@
+{
+    "name": "melody-wen/laravel-development",
+    "authors": [
+        {
+            "name": "mr wen",
+            "email": "604989282@qq.com"
+        }
+    ],
+    "require": {
+        "php" : ">=7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MelodyWen\\LaravelDevelopment\\": "src"
+        }
+    }
+}
