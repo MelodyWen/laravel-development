@@ -1,0 +1,1 @@
+@extends('development::layouts.master')
