@@ -1,9 +1,9 @@
-export default Vue.component('App', {
 
+export default Vue.component('App', {
     template: `
-  <div id="app">
-    <router-view/>
-  </div>
+      <div id="app">
+        <router-view/>
+      </div>
     `
 })
 

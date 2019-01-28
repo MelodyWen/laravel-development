@@ -67,6 +67,7 @@ class DevelopmentServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../resources/js' => public_path('vendor/development/js'),
+            __DIR__ . '/../resources/css' => public_path('vendor/development/css'),
         ], 'public');
     }
 }
