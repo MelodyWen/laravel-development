@@ -4,7 +4,6 @@ export let SideBar = Vue.component('side-bar', {
     <el-col :span="24">
         <h2 class="text-center">development</h2>
         <el-menu
-            default-active="2"
             class="el-menu-vertical-demo"
             background-color="#545c64"
             text-color="#fff"
@@ -38,11 +37,13 @@ export let SideBar = Vue.component('side-bar', {
   </el-col>
 </el-row>
     `,
+
     computed: {
         routes: function () {
             return this.$router.options.routes;
         },
     },
+
     methods: {
         redirectTo: function (router, grandson) {
             let path = router.path;

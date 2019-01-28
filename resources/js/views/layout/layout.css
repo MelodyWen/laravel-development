@@ -16,4 +16,16 @@
 
 #layout > div:nth-of-type(2){
     flex-grow:1;
+    display: flex;
+    flex-direction: column;
+}
+
+#nav-bar,#nav-bar small{
+    background: rgb(84, 92, 100);
+    color: white;
+    text-indent: 4em;
+}
+#container{
+    height: 100%;
+    flex-grow:1;
 }

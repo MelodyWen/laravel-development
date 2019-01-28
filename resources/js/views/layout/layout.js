@@ -1,5 +1,5 @@
 import {NavBar} from './components/nav_bar.js'
-import {SideBar} from './components/side-bar.js'
+import {SideBar} from './components/side_bar.js'
 
 export default Vue.component('Layout', {
     template: `
@@ -8,9 +8,13 @@ export default Vue.component('Layout', {
                 <side-bar></side-bar>       
             </div>
             <div>
-                <nav-bar></nav-bar>
+                <div id="nav-bar">
+                    <nav-bar></nav-bar>
+                </div>
+                <div id="container">
+                    <router-view></router-view>
+                </div>
             </div>
-        <router-view/>
         </div>
     `
 })

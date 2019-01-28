@@ -1,15 +1,19 @@
 import Layout from '../views/layout/layout.js'
 
+console.log((() => import('../views/modules/modules.js'))())
+
 export const constantRouterMap = [
     {
         path: '/',
         component: Layout,
-        redirect: '/dashboard',
-        name: 'Dashboard',
+        redirect: '/modules',
+        name: 'modules',
         children: [{
-            path: 'dashboard',
-            meta: { title: 'Tree', icon: 'el-icon-star-on' },
-            // component: () => import('@/views/dashboard/index')
+            path: 'modules',
+            meta: { title: '模块管理', icon: 'el-icon-star-on' },
+            component: async function () {
+                return (await import('../views/modules/modules.js')).default
+            }
         }]
     },
     {
