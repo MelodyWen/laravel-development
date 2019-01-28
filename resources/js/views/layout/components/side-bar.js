@@ -1,60 +1,62 @@
-export let SideBar  =  Vue.component('side-bar', {
+export let SideBar = Vue.component('side-bar', {
     template: `
 <el-row class="tac">
- 
-  <el-col :span="24">
-    <h2 class="text-center">laravel tool</h2>
-    <el-menu
-      default-active="2"
-      class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b">
-      <el-submenu index="1">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>导航一</span>
+    <el-col :span="24">
+        <h2 class="text-center">development</h2>
+        <el-menu
+            default-active="2"
+            class="el-menu-vertical-demo"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+      
+        <!--循环遍历路由-->
+        <template v-for="(router,index) in routes">
+            <!-- 1. 如果 child 只有 一个元素 则直接显示 -->
+            <el-menu-item v-if="router.children.length < 2 " :index="index.toString()" @click="redirectTo(router, router.children[0])">
+                <i :class="router.children[0].meta.icon"></i>
+                <span slot="title">{{ router.children[0].meta.title }}</span>
+            </el-menu-item>
+            
+            <!--2. 如果 child 有多个 元素 则分组显示， 最多二级分类， 不存在三级分类-->
+            <el-submenu v-else :index="index.toString()">
+                
+                <template slot="title">
+                  <i :class="router.meta.icon"></i>
+                  <span>{{ router.meta.title }}</span>
+                </template>
+
+                <el-menu-item v-for="(grandson,grandIndex) in router.children" 
+                    :key="grandIndex" :index="index + '-' + grandIndex"
+                    @click="redirectTo(router, grandson)"
+                    >
+                    {{ grandson.meta.title }}  {{ index + '-' + grandIndex  }}
+                </el-menu-item>
+            </el-submenu>
         </template>
-        <el-menu-item-group>
-          <template slot="title">分组一</template>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="分组2">
-          <el-menu-item index="1-3">选项3</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="1-4">
-          <template slot="title">选项4</template>
-          <el-menu-item index="1-4-1">选项1</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">导航二</span>
-      </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <i class="el-icon-document"></i>
-        <span slot="title">导航三</span>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <i class="el-icon-setting"></i>
-        <span slot="title">导航四</span>
-      </el-menu-item>
     </el-menu>
   </el-col>
 </el-row>
     `,
-
-
-    methods: {
-        handleOpen(key, keyPath) {
-            console.log(key, keyPath);
+    computed: {
+        routes: function () {
+            return this.$router.options.routes;
         },
-        handleClose(key, keyPath) {
-            console.log(key, keyPath);
+    },
+    methods: {
+        redirectTo: function (router, grandson) {
+            let path = router.path;
+
+            if (path.substr(path.length - 1) !== '/') {
+                path += '/'
+            }
+            this.$router.push(path + grandson.path);
+
+            console.log("跳转路由到：", grandson)
         }
+    },
+    mounted() {
+        console.log("侧边栏加载完毕：", this.$router.options.routes)
     }
 })
 
