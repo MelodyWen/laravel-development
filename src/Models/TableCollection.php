@@ -30,4 +30,9 @@ class TableCollection extends Model
     {
         return $this->belongsTo(Module::class, 'father_id');
     }
+
+    public function table()
+    {
+        return $this->belongsTo(Table::class, 'module_name', 'TABLE_NAME');
+    }
 }

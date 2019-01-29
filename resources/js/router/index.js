@@ -49,7 +49,7 @@ export const constantRouterMap = [
                 path: 'index',
                 meta: {title: '模块划分', icon: 'el-icon-tickets'},
                 component: async function () {
-                    return (await import('../views/table/update.js')).default
+                    return (await import('../views/tables/index.js')).default
                 },
             },
             {

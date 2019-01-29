@@ -10,7 +10,7 @@ class ModulesController extends Controller
 {
     public function index()
     {
-        $modules = Module::orderBy('sort', 'asc')->get();
+        $modules = Module::with('table_collections.table')->orderBy('sort', 'asc')->get();
 
         return $this->success($modules);
     }

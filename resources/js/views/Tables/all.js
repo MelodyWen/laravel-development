@@ -25,7 +25,7 @@ export default Vue.component('modules-index', {
                                     <el-table-column width="150" prop="TABLE_COLLATION" label="table_collection"></el-table-column>
                                     <el-table-column width="200" prop="CREATE_TIME" label="create_time"></el-table-column>
                                     <el-table-column width="200" prop="table_collection.module.module_name" label="module" fixed="right"></el-table-column>
-                               </el-table>
+                                </el-table>
                             </el-tab-pane>
                           <el-tab-pane label="未分配的数据表">
                                 <el-table :data="notInCollection" height="530">
@@ -51,7 +51,7 @@ export default Vue.component('modules-index', {
                                             </el-row>
                                         </template>
                                     </el-table-column>
-                               </el-table>
+                                </el-table>
                           </el-tab-pane>
                         </el-tabs>
                     </div>
