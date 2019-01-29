@@ -8,7 +8,7 @@ export default Vue.component('modules-create', {
                     <div class="col-xs-12">
                         <div class="page-header">
                             <h3>
-                                模块管理 —— 新建                               
+                                模块管理 —— 更新                               
                             </h3>
                         </div>
                     </div>

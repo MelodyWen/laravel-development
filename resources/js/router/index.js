@@ -41,23 +41,23 @@ export const constantRouterMap = [
         ]
     },
     {
-        path: '/example',
+        path: '/table',
         component: Layout,
-        redirect: '/example/table',
-        name: 'Example',
-        meta: {title: 'Example', icon: 'el-icon-star-on'},
+        meta: {title: '数据表管理', icon: 'el-icon-star-on'},
         children: [
             {
-                path: 'table',
-                name: 'Table',
-                // component: () => import('@/views/table/index'),
-                meta: {title: 'Table', icon: 'el-icon-tickets'}
+                path: 'index',
+                meta: {title: '模块划分', icon: 'el-icon-tickets'},
+                component: async function () {
+                    return (await import('../views/table/update.js')).default
+                },
             },
             {
-                path: 'tree',
-                name: 'Tree',
-                // component: () => import('@/views/tree/index'),
-                meta: {title: 'Tree', icon: 'el-icon-tickets'}
+                path: 'all',
+                meta: {title: '所有数据表', icon: 'el-icon-tickets'},
+                component: async function () {
+                    return (await import('../views/tables/all.js')).default
+                },
             }
         ]
     },
