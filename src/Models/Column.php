@@ -5,9 +5,9 @@ namespace MelodyWen\LaravelDevelopment\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Table extends Model
+class Column extends Model
 {
-    public $table = 'information_schema.TABLES';
+    public $table = 'information_schema.COLUMNS';
 
     public $guarded = [];
 
@@ -19,15 +19,5 @@ class Table extends Model
 
             $builder->whereIn('TABLE_SCHEMA', config('development.database_schema'));
         });
-    }
-
-    public function table_collection()
-    {
-        return $this->hasOne(TableCollection::class, 'module_name', 'TABLE_NAME');
-    }
-
-    public function columns()
-    {
-        return $this->hasMany(Column::class, 'TABLE_NAME', 'TABLE_NAME');
     }
 }
