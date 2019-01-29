@@ -10,7 +10,7 @@ class ModulesController extends Controller
 {
     public function index()
     {
-        $modules = Module::get();
+        $modules = Module::orderBy('sort', 'asc')->get();
 
         return $this->success($modules);
     }
@@ -56,8 +56,8 @@ class ModulesController extends Controller
             return $this->fail();
         }
 
-        $module->table_collections()->destroy();
-        $module->destroy();
+        $module->table_collections()->delete();
+        $module->delete();
 
         return $this->success();
     }

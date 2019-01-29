@@ -11,26 +11,31 @@ export let SideBar = Vue.component('side-bar', {
       
         <!--循环遍历路由-->
         <template v-for="(router,index) in routes">
+        
             <!-- 1. 如果 child 只有 一个元素 则直接显示 -->
-            <el-menu-item v-if="router.children.length < 2 " :index="index.toString()" @click="redirectTo(router, router.children[0])">
-                <i :class="router.children[0].meta.icon"></i>
-                <span slot="title">{{ router.children[0].meta.title }}</span>
+            <el-menu-item v-if="hasChildNum(router) == 1 " :index="index.toString()" @click="redirectTo(router)">
+                <template v-for="(child,childIndex) in router.children">
+                    <template v-if="child.hidden != true">
+                         <i :class="router.meta.icon"></i>
+                         <span slot="title">{{ router.meta.title }}</span>                                    
+                    </template>
+                </template>
             </el-menu-item>
             
             <!--2. 如果 child 有多个 元素 则分组显示， 最多二级分类， 不存在三级分类-->
-            <el-submenu v-else :index="index.toString()">
-                
+            <el-submenu v-else-if="hasChildNum(router) > 1" :index="index.toString()">
                 <template slot="title">
                   <i :class="router.meta.icon"></i>
                   <span>{{ router.meta.title }}</span>
                 </template>
-
-                <el-menu-item v-for="(grandson,grandIndex) in router.children" 
-                    :key="grandIndex" :index="index + '-' + grandIndex"
-                    @click="redirectTo(router, grandson)"
-                    >
-                    {{ grandson.meta.title }}  {{ index + '-' + grandIndex  }}
-                </el-menu-item>
+                <template v-for="(child,childIndex) in router.children">
+                    <template v-if="child.hidden != true">
+                        <el-menu-item
+                            :index="index + '-' + childIndex"
+                            @click="redirectTo(router, child)"
+                        > {{ child.meta.title }} </el-menu-item>         
+                    </template>
+                </template>
             </el-submenu>
         </template>
     </el-menu>
@@ -45,15 +50,25 @@ export let SideBar = Vue.component('side-bar', {
     },
 
     methods: {
-        redirectTo: function (router, grandson) {
+        redirectTo: function (router, child) {
             let path = router.path;
 
             if (path.substr(path.length - 1) !== '/') {
                 path += '/'
             }
-            this.$router.push(path + grandson.path);
+            this.$router.push(path + (child ? child.path : ''));
 
-            console.log("跳转路由到：", grandson)
+            console.log("跳转路由到：", child ? child : router)
+        },
+        hasChildNum: function (router) {
+            let response = collect(router.children).reduce(function (carry, item) {
+                carry = carry ? carry : 0;
+
+                return item.hidden ? carry : ++carry;
+
+            });
+
+            return response ? response : 0;
         }
     },
     mounted() {

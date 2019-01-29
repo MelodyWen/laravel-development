@@ -1,3 +1,5 @@
+let globalVue;
+
 // 使用ES 的语法完成结果
 (async function () {
 
@@ -10,7 +12,7 @@
 
 
     // 2. 绑定到对应的vue 上面
-    new Vue({
+    globalVue = new Vue({
         el: '#app',
         router,
         store,
