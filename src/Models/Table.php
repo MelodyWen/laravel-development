@@ -21,8 +21,8 @@ class Table extends Model
         });
     }
 
-    public function module()
+    public function table_collection()
     {
-        return $this->belongsTo(Module::class, 'TABLE_NAME', 'module_name');
+        return $this->hasOne(TableCollection::class, 'module_name', 'TABLE_NAME');
     }
 }

@@ -9,7 +9,7 @@ class CommonController extends Controller
 {
     public function all()
     {
-        $tables = Table::with('module')->get();
+        $tables = Table::with('table_collection.module')->get();
 
         return $this->success($tables);
     }

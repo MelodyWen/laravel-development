@@ -28,6 +28,6 @@ class TableCollection extends Model
 
     public function module()
     {
-        return $this->belongsTo(Module::class, 'father_ids');
+        return $this->belongsTo(Module::class, 'father_id');
     }
 }
