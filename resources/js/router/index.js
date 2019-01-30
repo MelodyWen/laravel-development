@@ -47,14 +47,14 @@ export const constantRouterMap = [
         children: [
             {
                 path: 'index',
-                meta: {title: '模块划分', icon: 'el-icon-tickets'},
+                meta: {title: '模块划分'},
                 component: async function () {
                     return (await import('../views/tables/index.js')).default
                 },
             },
             {
                 path: 'all',
-                meta: {title: '所有数据表', icon: 'el-icon-tickets'},
+                meta: {title: '所有数据表'},
                 component: async function () {
                     return (await import('../views/tables/all.js')).default
                 },
@@ -62,15 +62,28 @@ export const constantRouterMap = [
         ]
     },
     {
-        path: '/form',
+        path: '/builder',
         component: Layout,
-        meta: {title: '模块管理', icon: 'el-icon-star-on'},
+        meta: {title: '生成器', icon: 'el-icon-star-on'},
         children: [
             {
-                path: 'index',
-                name: 'Form',
-                // component: () => import('@/views/form/index'),
-                meta: {title: 'Form', icon: 'el-icon-tickets'}
+                path: 'data',
+                meta: {title: '数据自动填充'},
+                component: async function () {
+                    return (await import('../views/builder/generate_data.js')).default
+                },
+            }, {
+                path: 'php',
+                meta: {title: 'php 数据格式'}
+            }, {
+                path: 'js',
+                meta: {title: 'js 数据格式'}
+            }, {
+                path: 'yml',
+                meta: {title: 'yml 数据格式'}
+            }, {
+                path: 'swagger',
+                meta: {title: 'swagger 数据格式'}
             }
         ]
     },

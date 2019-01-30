@@ -1,8 +1,9 @@
+import tableCollection from './modules/table_collection.js'
 
 
 const store = new Vuex.Store({
     modules: {
-
+        tableCollection
     },
 });
 

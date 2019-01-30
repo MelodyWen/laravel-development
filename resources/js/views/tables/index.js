@@ -8,7 +8,7 @@ export default Vue.component('modules-index', {
                     <div class="col-xs-12">
                         <div class="page-header">
                             <h3>
-                                所有的数据表管理
+                                模块数据
                             </h3>
                         </div>
                     </div>
@@ -30,7 +30,7 @@ export default Vue.component('modules-index', {
                                                 <el-table-column width="70" prop="COLUMN_KEY" label="索引列"></el-table-column>
                                                 <el-table-column width="70" prop="IS_NULLABLE" label="is null"></el-table-column>
                                                 <el-table-column width="70" prop="COLUMN_DEFAULT" label="默认值"></el-table-column>
-                                                <el-table-column width="200" prop="COLUMN_COMMENT" label="备注"></el-table-column>
+                                                <el-table-column width="300" prop="COLUMN_COMMENT" label="备注"></el-table-column>
                                                 
                                                 <el-table-column width="100" prop="DATA_TYPE" label="数据类型"></el-table-column>
                                                 <el-table-column width="100" prop="CHARACTER_MAXIMUM_LENGTH" label="字符-长度"></el-table-column>
@@ -48,10 +48,21 @@ export default Vue.component('modules-index', {
                                         </template>
                                     </el-table-column>
                                     
-                                    <el-table-column prop="sort" label="sn"></el-table-column>
+                                    <el-table-column prop="sort" label="sn" width="50"></el-table-column>
                                     <el-table-column prop="table.TABLE_NAME" label="table_name"></el-table-column>
                                     <el-table-column prop="table.TABLE_COMMENT" label="table_comment" ></el-table-column>
-                                     <el-table-column label="操作">
+                                    <el-table-column label="生成器">
+                                        <template slot-scope="scope">
+                                            <el-row>
+                                                <el-button type="text" size="small">mock</el-button>             
+                                                <el-button type="text" size="small">php</el-button>             
+                                                <el-button type="text" size="small">js</el-button>             
+                                                <el-button type="text" size="small">yml</el-button>             
+                                                <el-button type="text" size="small">swagger</el-button>             
+                                            </el-row>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="操作">
                                         <template slot-scope="scope">
                                             <el-row>
                                                 <el-col :span="10">
@@ -137,6 +148,7 @@ export default Vue.component('modules-index', {
 
             return color[rowIndex % 7];
         },
+
     },
 
     mounted: function () {

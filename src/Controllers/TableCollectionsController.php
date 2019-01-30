@@ -38,7 +38,7 @@ class TableCollectionsController extends Controller
 
     public function show($module, $id)
     {
-        $tableCollection = TableCollection::find($id);
+        $tableCollection = TableCollection::with(['module', 'table.columns'])->find($id);
 
         return $tableCollection ? $this->success($tableCollection) : $this->fail();
     }
