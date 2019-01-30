@@ -17,7 +17,7 @@ export default Vue.component('modules-index', {
                     <div class="col-xs-12">
                         <el-tabs type="border-card">
                             <el-tab-pane label="所有的数据表">
-                                <el-table :data="allTables" height="530">
+                                <el-table :data="allTables">
                                     <el-table-column width="100" prop="id" label="sn" fixed="left"></el-table-column>
                                     <el-table-column width="200" prop="TABLE_NAME" label="table_name" fixed="left"></el-table-column>
                                     <el-table-column width="300" prop="TABLE_COMMENT" label="table_comment" ></el-table-column>
@@ -28,7 +28,7 @@ export default Vue.component('modules-index', {
                                 </el-table>
                             </el-tab-pane>
                           <el-tab-pane label="未分配的数据表">
-                                <el-table :data="notInCollection" height="530">
+                                <el-table :data="notInCollection">
                                     <el-table-column prop="id" label="sn"></el-table-column>
                                     <el-table-column prop="TABLE_NAME" label="table_name"></el-table-column>
                                     <el-table-column prop="TABLE_COMMENT" label="table_comment" ></el-table-column>

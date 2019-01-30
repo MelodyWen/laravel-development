@@ -18,7 +18,7 @@ export default Vue.component('modules-index', {
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <el-table :data="tableData" height="530">
+                        <el-table :data="tableData">
                             <el-table-column prop="id" label="序号"></el-table-column>
                             <el-table-column prop="module_name" label="模块名称"></el-table-column>
                             <el-table-column prop="sort" label="排序"></el-table-column>

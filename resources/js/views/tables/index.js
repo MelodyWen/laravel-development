@@ -15,10 +15,10 @@ export default Vue.component('modules-index', {
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <el-tabs type="border-card" tab-position="left" style="height: 700px;">
+                        <el-tabs type="border-card" tab-position="left">
                             <el-tab-pane :key="key" v-for="(module,key) in modules" :label="module.sort +'. '+ module.module_name"> 
                                 
-                                <el-table :data="module.table_collections" height="650">
+                                <el-table :data="module.table_collections">
                                     
                                     <el-table-column type="expand">
                                         <template slot-scope="props">
