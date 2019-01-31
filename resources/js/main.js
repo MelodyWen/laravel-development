@@ -2,7 +2,7 @@ let globalVue;
 
 // 使用ES 的语法完成结果
 (async function () {
-    
+
     // 1 . 获取相应的资源
     let app = await import('./app.js');
     let router = await import('./router/index.js');
@@ -17,7 +17,7 @@ let globalVue;
         if (store.state.tableCollection.module === undefined) {
             let cookieStore = await import('./utils/cookie_store.js');
 
-            store.dispatch('setTableCollection',cookieStore.getStoreTableCollection())
+            await store.dispatch('setTableCollection', cookieStore.getStoreTableCollection());
             next();
         } else {
             next();

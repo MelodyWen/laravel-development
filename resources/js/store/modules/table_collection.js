@@ -15,7 +15,7 @@ const tableCollection = {
             state.module = value;
         },
         setTableCollection: (state, value) => {
-            state.token = value
+            state.tableCollection = value
         },
     },
 
@@ -40,25 +40,30 @@ const tableCollection = {
          * @param tableCollectionId
          */
         setTableCollection({commit}, tableCollectionId) {
+            return new Promise((resolve, reject) => {
+                service({
+                    url: '/1/table-collections/' + tableCollectionId,
+                    method: 'get',
+                }).then(function (response) {
+                    let module = null;
+                    let tableCollection = null;
 
-            service({
-                url: '/1/table-collections/' + 123213,
-                method: 'get',
-            }).then(function (response) {
-                let module = null;
-                let tableCollection = null;
+                    if (response.data !== null) {
+                        module = response.data.module;
+                        delete response.data.module;
 
-                if(response.data !== null){
-                    module = response.data.module;
-                    delete response.data.module;
+                        tableCollection = response.data;
+                    }
 
-                    tableCollection= response.data;
-                }
+                    commit('setModule', module);
+                    commit('setTableCollection', tableCollection);
 
-                commit('setModule', module);
-                commit('setTableCollection', tableCollection);
-
-                setStoreTableCollection(tableCollectionId);
+                    setStoreTableCollection(tableCollectionId);
+                    console.log('store=> tableCollection 发生变更，返回值为:', response)
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
             });
         }
     },

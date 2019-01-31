@@ -7,12 +7,36 @@ export default Vue.component('modules-index', {
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="page-header">
-                            <h3>
-                                数据生成器
-                                
-                                    <router-link to="/modules/create"><el-button size="mini" type="primary" > 新建 </el-button></router-link>
-                                
-                            </h3>
+                            <el-row>
+                                 <el-col :span="3"><h3>数据生成器</h3></el-col>
+                                 <el-col :span="7">
+                                    <div class="form-group">
+                                        <label class="col-xs-4 control-label"><h3 class="text-right"><small>模块名称</small></h3></label>
+                                        <div class="col-xs-8">
+                                            <h3>
+                                                <select class="form-control" v-model="navForm.module">
+                                                    <option v-for="module in modules" :value="module.id">{{ module.module_name }}</option>
+                                                </select>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                 </el-col>
+                                 <el-col :span="7">
+                                    <div class="form-group">
+                                        <label class="col-xs-4 control-label"><h3 class="text-right"><small>数据表名</small></h3></label>
+                                        <div class="col-xs-8">
+                                            <h3>
+                                                <select class="form-control" v-model="navForm.tableCollection">
+                                                    <option v-for="navTableCollection in navTableCollections" :value="navTableCollection.id">
+                                                        {{ navTableCollection.sort + '. ' + navTableCollection.module_name }}
+                                                    </option>
+                                                  
+                                                </select>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                 </el-col>
+                            </el-row>
                         </div>
                     </div>
                 </div>
@@ -81,9 +105,51 @@ export default Vue.component('modules-index', {
     data() {
         return {
             modules: [],
+            navForm: {
+                module: undefined,
+                tableCollection: undefined,
+            }
+        }
+    },
+    computed: {
+        /**
+         * 如果选择了对应 module 发生改变 ，则对应的二级联动也需要更变
+         * @returns {*}
+         */
+        navTableCollections: function () {
+            let response = collect(this.modules).where('id', this.navForm.module);
+
+            if (response.isEmpty()) {
+                return []
+            }
+            return response.first().table_collections;
+        }
+    },
+    watch: {
+        navForm: {
+            /**
+             *  如果发现 对应的 tableCollection 发生变动， 则需要更新 store 内部的值
+             * @param newVal
+             * @param oldVal
+             */
+            handler: function (newVal, oldVal) {
+                if (this.$store.state.tableCollection.id !== newVal.tableCollection) {
+                    this.$store.dispatch('setTableCollection', newVal.tableCollection)
+                }
+            },
+            deep: true
         }
     },
     methods: {
+        /**
+         * 初始化 导航
+         */
+        initNav: function () {
+            if (this.$store.state.tableCollection.module) {
+                this.navForm.module = this.$store.state.tableCollection.module.id
+                this.navForm.tableCollection = this.$store.state.tableCollection.tableCollection.id
+            }
+        },
         initPage: async function () {
             let that = this;
 
@@ -102,49 +168,13 @@ export default Vue.component('modules-index', {
                 return item;
             }).toArray();
 
-            that.$set(that, 'modules', response);
-        },
-        sort: function (row) {
-            let that = this;
-            service({
-                url: '/1/table-collections/' + row.id,
-                method: 'put',
-                data: row
-            }).then(function (response) {
-                console.log(response)
-                that.$message({
-                    message: response.message,
-                    type: 'success'
-                });
-                that.initPage()
-            });
-        },
-        destroy: function (row) {
-            let that = this;
-            service({
-                url: '/1/table-collections/' + row.id,
-                method: 'delete',
-            }).then(function (response) {
-                console.log(response)
-                that.$message({
-                    message: response.message,
-                    type: 'success'
-                });
-                that.initPage()
-            });
-        },
-        tableRowClassName: function ({row, rowIndex}) {
-            let color = ['table-color-1', 'table-color-2', 'table-color-3', 'table-color-4', 'table-color-5',
-                'table-color-6', 'table-color-7',
-            ];
 
-            return color[rowIndex % 7];
+            that.$set(that, 'modules', response);
         },
     },
 
     mounted: function () {
-        this.$store.dispatch('setTableCollection',13)
-        console.log('view')
+        this.initNav();
         this.initPage()
     }
 })
