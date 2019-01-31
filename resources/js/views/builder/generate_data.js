@@ -67,7 +67,30 @@ export default Vue.component('modules-index', {
                                 </form>
                              </el-tab-pane>
                              <el-tab-pane label="配置字段">配置字段</el-tab-pane>
-                             <el-tab-pane label="数据预览">数据预览</el-tab-pane>
+                             
+                             <el-tab-pane label="数据预览">                         
+                                <div style="width: 100%;overflow: scroll">
+                                    <table class="table table-bordered"><tbody>
+                                        <template v-if="builderGenerateForm.tableCollection.table != null">
+                                       
+                                            <tr>
+                                                <th v-for="(column,index) in builderGenerateForm.tableCollection.table.columns">
+                                                    {{column.COLUMN_NAME}}
+                                                </th>
+                                            </tr>
+                                            <template v-for="item in generateDataForm">
+                                                <tr>
+                                                     <td v-for="(column,index) in builderGenerateForm.tableCollection.table.columns"
+                                                        style="max-width:50em;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"
+                                                     >
+                                                        {{item[column.COLUMN_NAME]}}
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </template>
+                                    </tbody></table>
+                                </div>
+                             </el-tab-pane>
                         </el-tabs>
                     </div>
                 </div>
@@ -82,11 +105,10 @@ export default Vue.component('modules-index', {
                 tableCollectionId: undefined,
             },
             builderGenerateForm: {
-                tableCollection: {
-                    collection_name: 231321,
-                },
-                rowNum: 1,
-            }
+                tableCollection: {},
+                rowNum: 10,
+            },
+            generateDataForm: [],
         }
     },
     computed: {
@@ -121,7 +143,29 @@ export default Vue.component('modules-index', {
                 }
             },
             deep: true
+        },
+        builderGenerateForm: {
+            handler: async function (newVal, oldVal) {
+                if (!this.builderGenerateForm.tableCollection) {
+                    return;
+                }
+                let generateDataForm = [];
+                for (let i = 0; i < newVal.rowNum; i++) {
+                    let row = collect(this.builderGenerateForm.tableCollection.table.columns).map(function (item) {
+                        return {[item.COLUMN_NAME]: null,}
+                    }).reduce(function (carry, item) {
+                        if (!carry) {
+                            carry = {}
+                        }
+                        return {...carry, ...item};
+                    });
+                    generateDataForm.push(row)
+                }
+                this.$set(this, 'generateDataForm', generateDataForm);
+            },
+            deep: true
         }
+
     },
     methods: {
         /**
