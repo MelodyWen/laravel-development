@@ -20,7 +20,7 @@ export default Vue.component('modules-index', {
                     <div class="col-xs-12">
                         <el-table :data="tableData">
                             <el-table-column prop="id" label="序号"></el-table-column>
-                            <el-table-column prop="module_name" label="模块名称"></el-table-column>
+                            <el-table-column prop="collection_name" label="模块名称"></el-table-column>
                             <el-table-column prop="sort" label="排序"></el-table-column>
                             <el-table-column prop="created_at" label="添加时间"></el-table-column>
                             <el-table-column label="操作">

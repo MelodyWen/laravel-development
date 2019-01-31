@@ -14,8 +14,8 @@ export default Vue.component('modules-index', {
                                         <label class="col-xs-4 control-label"><h3 class="text-right"><small>模块名称</small></h3></label>
                                         <div class="col-xs-8">
                                             <h3>
-                                                <select class="form-control" v-model="navForm.module">
-                                                    <option v-for="module in modules" :value="module.id">{{ module.module_name }}</option>
+                                                <select class="form-control" v-model="navForm.moduleId">
+                                                    <option v-for="module in modules" :value="module.id">{{ module.collection_name }}</option>
                                                 </select>
                                             </h3>
                                         </div>
@@ -26,9 +26,9 @@ export default Vue.component('modules-index', {
                                         <label class="col-xs-4 control-label"><h3 class="text-right"><small>数据表名</small></h3></label>
                                         <div class="col-xs-8">
                                             <h3>
-                                                <select class="form-control" v-model="navForm.tableCollection">
+                                                <select class="form-control" v-model="navForm.tableCollectionId">
                                                     <option v-for="navTableCollection in navTableCollections" :value="navTableCollection.id">
-                                                        {{ navTableCollection.sort + '. ' + navTableCollection.module_name }}
+                                                        {{ navTableCollection.sort + '. ' + navTableCollection.collection_name }}
                                                     </option>
                                                   
                                                 </select>
@@ -42,60 +42,32 @@ export default Vue.component('modules-index', {
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <el-tabs type="border-card" tab-position="left" style="height: 700px;">
-                            <el-tab-pane :key="key" v-for="(module,key) in modules" :label="module.sort +'. '+ module.module_name"> 
-                                
-                                <el-table :data="module.table_collections" height="650">
-                                    
-                                    <el-table-column type="expand">
-                                        <template slot-scope="props">
-                                            
-                                            <el-table :data="props.row.table.columns" style="width: 100%;" :row-class-name="tableRowClassName">
-                                                <el-table-column width="150" prop="COLUMN_NAME" label="列名" fixed></el-table-column>
-                                                <el-table-column width="120" prop="COLUMN_TYPE" label="列的定义类型"></el-table-column>
-                                                
-                                                <el-table-column width="70" prop="COLUMN_KEY" label="索引列"></el-table-column>
-                                                <el-table-column width="70" prop="IS_NULLABLE" label="is null"></el-table-column>
-                                                <el-table-column width="70" prop="COLUMN_DEFAULT" label="默认值"></el-table-column>
-                                                <el-table-column width="300" prop="COLUMN_COMMENT" label="备注"></el-table-column>
-                                                
-                                                <el-table-column width="100" prop="DATA_TYPE" label="数据类型"></el-table-column>
-                                                <el-table-column width="100" prop="CHARACTER_MAXIMUM_LENGTH" label="字符-长度"></el-table-column>
-                                                <el-table-column width="80" prop="NUMERIC_PRECISION" label="数字长度"></el-table-column>
-                                                <el-table-column width="80" prop="NUMERIC_SCALE" label="数字精度"></el-table-column>
-                                                <el-table-column width="100" prop="DATETIME_PRECISION" label="时间-精度"></el-table-column>
-                                                <el-table-column width="70" prop="CHARACTER_SET_NAME" label="字符集"></el-table-column>
-                                                <el-table-column width="120" prop="COLLATION_NAME" label="校对规则"></el-table-column>
-                                                
-                                                <el-table-column width="250" prop="EXTRA" label="额外信息"></el-table-column>
-                                                <el-table-column width="300" prop="GENERATION_EXPRESSION" label="计算表达式"></el-table-column>
-                                                
-                                            </el-table>
-                                          
-                                        </template>
-                                    </el-table-column>
-                                    
-                                    <el-table-column prop="sort" label="sn"></el-table-column>
-                                    <el-table-column prop="table.TABLE_NAME" label="table_name"></el-table-column>
-                                    <el-table-column prop="table.TABLE_COMMENT" label="table_comment" ></el-table-column>
-                                     <el-table-column label="操作">
-                                        <template slot-scope="scope">
-                                            <el-row>
-                                                <el-col :span="10">
-                                                    <el-input v-model="scope.row.sort" size="mini" type="number"></el-input>
-                                                </el-col>
-                                                <el-col :span="14" class="text-center">
-                                                    <el-button type="text" size="small" @click="sort(scope.row)">确定</el-button>                                 
-                                                    <el-button type="text" size="small" @click="destroy(scope.row)">
-                                                        <span style="color:#F56C6C">删除</span>
-                                                    </el-button>                                 
-                                                </el-col>
-                                            </el-row>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-    
-                            </el-tab-pane>
+                        <el-tabs type="border-card" tab-position="top">
+                             <el-tab-pane label="生成基本配置">
+                                <form class="form-horizontal" onclick="return false">
+                                    <div class="form-group">
+                                        <label class="col-xs-2 control-label">table name</label>
+                                        <div class="col-xs-4">
+                                            <input type="text"  class="form-control" disabled
+                                                :value="builderGenerateForm.tableCollection.collection_name" 
+                                                placeholder="table name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-2 control-label">row num </label>
+                                        <div class="col-xs-4">
+                                            <input type="number" class="form-control" v-model="builderGenerateForm.rowNum" placeholder="row num">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="submit" class="btn btn-default">生成数据</button>
+                                        </div>
+                                    </div>
+                                </form>
+                             </el-tab-pane>
+                             <el-tab-pane label="配置字段">配置字段</el-tab-pane>
+                             <el-tab-pane label="数据预览">数据预览</el-tab-pane>
                         </el-tabs>
                     </div>
                 </div>
@@ -106,8 +78,14 @@ export default Vue.component('modules-index', {
         return {
             modules: [],
             navForm: {
-                module: undefined,
-                tableCollection: undefined,
+                moduleId: undefined,
+                tableCollectionId: undefined,
+            },
+            builderGenerateForm: {
+                tableCollection: {
+                    collection_name: 231321,
+                },
+                rowNum: 1,
             }
         }
     },
@@ -117,7 +95,7 @@ export default Vue.component('modules-index', {
          * @returns {*}
          */
         navTableCollections: function () {
-            let response = collect(this.modules).where('id', this.navForm.module);
+            let response = collect(this.modules).where('id', this.navForm.moduleId);
 
             if (response.isEmpty()) {
                 return []
@@ -132,9 +110,14 @@ export default Vue.component('modules-index', {
              * @param newVal
              * @param oldVal
              */
-            handler: function (newVal, oldVal) {
-                if (this.$store.state.tableCollection.id !== newVal.tableCollection) {
-                    this.$store.dispatch('setTableCollection', newVal.tableCollection)
+            handler: async function (newVal, oldVal) {
+                if (this.$store.state.tableCollection.id !== newVal.tableCollectionId) {
+                    await this.$store.dispatch('setTableCollection', newVal.tableCollectionId)
+                }
+
+                // 通过二级联动，选中对应的 table collection 值
+                if (this.$store.state.tableCollection.tableCollection) {
+                    this.$set(this.builderGenerateForm, 'tableCollection', this.$store.state.tableCollection.tableCollection)
                 }
             },
             deep: true
@@ -146,8 +129,8 @@ export default Vue.component('modules-index', {
          */
         initNav: function () {
             if (this.$store.state.tableCollection.module) {
-                this.navForm.module = this.$store.state.tableCollection.module.id
-                this.navForm.tableCollection = this.$store.state.tableCollection.tableCollection.id
+                this.navForm.moduleId = this.$store.state.tableCollection.module.id
+                this.navForm.tableCollectionId = this.$store.state.tableCollection.tableCollection.id
             }
         },
         initPage: async function () {
@@ -168,14 +151,13 @@ export default Vue.component('modules-index', {
                 return item;
             }).toArray();
 
-
             that.$set(that, 'modules', response);
         },
     },
 
-    mounted: function () {
+    mounted: async function () {
+        await this.initPage();
         this.initNav();
-        this.initPage()
     }
 })
 

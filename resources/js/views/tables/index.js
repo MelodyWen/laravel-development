@@ -16,7 +16,7 @@ export default Vue.component('modules-index', {
                 <div class="row">
                     <div class="col-xs-12">
                         <el-tabs type="border-card" tab-position="left">
-                            <el-tab-pane :key="key" v-for="(module,key) in modules" :label="module.sort +'. '+ module.module_name"> 
+                            <el-tab-pane :key="key" v-for="(module,key) in modules" :label="module.sort +'. '+ module.collection_name"> 
                                 
                                 <el-table :data="module.table_collections">
                                     

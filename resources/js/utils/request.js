@@ -1,6 +1,8 @@
 let baseUrl = location.href;
 
-baseUrl = baseUrl.substr(0, baseUrl.indexOf('#'));
+if(baseUrl.indexOf('#')> 0){
+    baseUrl = baseUrl.substr(0, baseUrl.indexOf('#'));
+}
 
 const service = axios.create({
     baseURL: baseUrl,   // api 的 base_url

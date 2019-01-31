@@ -29,7 +29,7 @@ class TableCollectionsController extends Controller
         }
 
         $module->table_collections()->create([
-            'module_name' => $request->module_name ?: '',
+            'collection_name' => $request->collection_name ?: '',
             'sort' => $request->sort ?: 1,
         ]);
 
@@ -52,7 +52,7 @@ class TableCollectionsController extends Controller
         }
 
         $tableCollection->update([
-            'module_name' => $request->module_name ?: '',
+            'collection_name' => $request->collection_name ?: '',
             'sort' => $request->sort ?: 1,
         ]);
 

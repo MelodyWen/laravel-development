@@ -24,7 +24,7 @@ export default Vue.component('modules-index', {
                                     <el-table-column width="200" prop="TABLE_SCHEMA" label="table_schema"></el-table-column>
                                     <el-table-column width="150" prop="TABLE_COLLATION" label="table_collection"></el-table-column>
                                     <el-table-column width="200" prop="CREATE_TIME" label="create_time"></el-table-column>
-                                    <el-table-column width="200" prop="table_collection.module.module_name" label="module" fixed="right"></el-table-column>
+                                    <el-table-column width="200" prop="table_collection.module.collection_name" label="module" fixed="right"></el-table-column>
                                 </el-table>
                             </el-tab-pane>
                           <el-tab-pane label="未分配的数据表">
@@ -40,7 +40,7 @@ export default Vue.component('modules-index', {
                                                         <el-option
                                                           v-for="item in modules"
                                                           :key="item.value"
-                                                          :label="item.module_name"
+                                                          :label="item.collection_name"
                                                           :value="item.id">
                                                         </el-option>
                                                     </el-select>
@@ -110,7 +110,7 @@ export default Vue.component('modules-index', {
                 url: '/' + row.module + '/table-collections',
                 method: 'post',
                 data: {
-                    module_name: row.TABLE_NAME
+                    collection_name: row.TABLE_NAME
                 }
             }).then(function (response) {
                 that.$message({

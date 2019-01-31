@@ -35,7 +35,7 @@ class ModulesController extends Controller
     public function store(Request $request)
     {
         Module::create([
-            'module_name' => $request->module_name ?: '',
+            'collection_name' => $request->collection_name ?: '',
             'sort' => $request->sort ?: 1,
         ]);
 
@@ -58,7 +58,7 @@ class ModulesController extends Controller
         }
 
         $module->update([
-            'module_name' => $request->module_name ?: '',
+            'collection_name' => $request->collection_name ?: '',
             'sort' => $request->sort ?: 1,
         ]);
 

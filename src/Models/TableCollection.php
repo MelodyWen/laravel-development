@@ -33,6 +33,6 @@ class TableCollection extends Model
 
     public function table()
     {
-        return $this->belongsTo(Table::class, 'module_name', 'TABLE_NAME');
+        return $this->belongsTo(Table::class, 'collection_name', 'TABLE_NAME');
     }
 }

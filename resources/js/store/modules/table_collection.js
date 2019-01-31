@@ -54,7 +54,6 @@ const tableCollection = {
 
                         tableCollection = response.data;
                     }
-
                     commit('setModule', module);
                     commit('setTableCollection', tableCollection);
 

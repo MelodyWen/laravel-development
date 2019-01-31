@@ -16,7 +16,7 @@ class CreateDatabaseCollectionsTable extends Migration
     {
         Schema::create('database_collections', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('module_name')->default('')->comment('模块名称');
+            $table->string('collection_name')->default('')->comment('模块名称,或者表名');
             $table->tinyInteger('type')->default(1)->comment('类型: 1. 表示 模块 2： 表示 table');
             $table->unsignedInteger('father_id')->default(0)->comment('表示模块的id');
             $table->unsignedInteger('sort')->default(1)->comment('序号');

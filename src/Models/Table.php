@@ -23,7 +23,7 @@ class Table extends Model
 
     public function table_collection()
     {
-        return $this->hasOne(TableCollection::class, 'module_name', 'TABLE_NAME');
+        return $this->hasOne(TableCollection::class, 'collection_name', 'TABLE_NAME');
     }
 
     public function columns()
