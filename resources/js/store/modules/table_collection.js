@@ -1,13 +1,13 @@
 import service from './../../utils/request.js';
-import {setStoreTableCollection, getStoreTableCollection} from './../../utils/cookie_store.js';
+import {setStoreTableCollection} from './../../utils/cookie_store.js';
 
 
 const tableCollection = {
     state: {
         // 对应的模块名称
-        module: null,
+        module: undefined,
         // 对应的 tableCollection 的记录
-        tableCollection: null,
+        tableCollection: undefined,
     },
 
     mutations: {
@@ -42,20 +42,24 @@ const tableCollection = {
         setTableCollection({commit}, tableCollectionId) {
 
             service({
-                url: '/1/table-collections/' + tableCollectionId,
+                url: '/1/table-collections/' + 123213,
                 method: 'get',
             }).then(function (response) {
-                let module = response.data.module;
-                delete response.data.module;
+                let module = null;
+                let tableCollection = null;
+
+                if(response.data !== null){
+                    module = response.data.module;
+                    delete response.data.module;
+
+                    tableCollection= response.data;
+                }
 
                 commit('setModule', module);
-                commit('setTableCollection', response.data);
+                commit('setTableCollection', tableCollection);
 
-                setStoreTableCollection(123123123);
+                setStoreTableCollection(tableCollectionId);
             });
-
-
-            // console.log(1312, tableCollectionId)tableCollectionId
         }
     },
 

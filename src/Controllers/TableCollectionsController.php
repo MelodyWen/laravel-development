@@ -40,7 +40,7 @@ class TableCollectionsController extends Controller
     {
         $tableCollection = TableCollection::with(['module', 'table.columns'])->find($id);
 
-        return $tableCollection ? $this->success($tableCollection) : $this->fail();
+        return $this->success($tableCollection);
     }
 
     public function update($module, $id, Request $request)
