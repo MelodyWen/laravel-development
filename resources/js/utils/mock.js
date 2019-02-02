@@ -474,7 +474,7 @@ mock.categories = [
             null: {
                 name: 'null',
                 method: function (rowNum) {
-                    return '无';
+                    return null;
                 },
             },
         }

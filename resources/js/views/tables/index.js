@@ -54,7 +54,7 @@ export default Vue.component('modules-index', {
                                     <el-table-column label="生成器">
                                         <template slot-scope="scope">
                                             <el-row>
-                                                <el-button type="text" size="small">mock</el-button>             
+                                                <el-button type="text" size="small" @click="jumpPage(scope.row, '/builder/data')">mock</el-button>             
                                                 <el-button type="text" size="small">php</el-button>             
                                                 <el-button type="text" size="small">js</el-button>             
                                                 <el-button type="text" size="small">yml</el-button>             
@@ -148,6 +148,10 @@ export default Vue.component('modules-index', {
 
             return color[rowIndex % 7];
         },
+        jumpPage: function (row, toPath) {
+            this.$store.dispatch('setTableCollection', row.id)
+            this.$router.push(toPath);
+        }
 
     },
 
