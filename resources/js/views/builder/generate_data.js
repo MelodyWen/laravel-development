@@ -81,7 +81,8 @@ export default Vue.component('modules-index', {
      <div class="el-row" v-for="category in  mock.categories">
         <el-col :span="24"><h5>{{ category.root_name }}</h5></el-col>
         <el-col :span="24">
-            <el-button type="text" v-for="(child,childIndex) in  category.root_category" :key="childIndex">
+            <el-button type="text" v-for="(child,childIndex) in  category.root_category" :key="childIndex" 
+                @click="changeMockType(columnsConfig, child)">
                 {{ child.name }}
             </el-button>
         </el-col>
@@ -91,9 +92,9 @@ export default Vue.component('modules-index', {
 
 <!--实际的出来的结果如下所示-->
 <el-main>
-    <h5> 运行的代码如下所示 ：<el-button type="success" size="mini">再次运行</el-button> </h5>
-    <textarea  rows="10" style="background: #fafafa;width: 100%;border-radius: 10px">
-                {{columnsConfig.mockCode}}</textarea>
+    <h5> 运行的代码如下所示 ：<el-button type="success" size="mini" @click="changeMockMethod">再次运行</el-button> </h5>
+    <textarea  rows="10" style="background: #fafafa;width: 100%;border-radius: 10px" v-model="columnsConfig.mockCode">
+    </textarea>
     <h5> 具体的结果展示 (mock type:  {{ columnsConfig.mockType }}) </h5>
      <pre style="background: #fafafa">
 mock result : {{ columnsConfig.mockResult }}
@@ -253,6 +254,9 @@ mock result : {{ columnsConfig.mockResult }}
         computeMockResult: function (columnsConfigs) {
             let that = this;
             columnsConfigs = collect(columnsConfigs).map(function (item) {
+                if (typeof item.mockCode === "string") {
+                    eval(' item.mockCode =' + item.mockCode)
+                }
 
                 if (typeof item.mockCode != "function") {
                     return item
@@ -262,7 +266,7 @@ mock result : {{ columnsConfig.mockResult }}
                     item.mockResult = item.mockCode(that.builderGenerateForm.rowNum)
                     return item;
                 }
-
+                item.mockResult = [];
                 for (let i = 0; i < that.builderGenerateForm.rowNum; i++) {
                     item.mockResult.push(item.mockCode(that.builderGenerateForm.rowNum))
                 }
@@ -288,14 +292,35 @@ mock result : {{ columnsConfig.mockResult }}
             }
 
             return generateDataForm;
-        }
+        },
 
+        changeMockType: function (columnsConfig, mockCategory) {
+            columnsConfig.mockType = mockCategory.name;
+            columnsConfig.mockCode = mockCategory.method;
+
+            let columnsConfigs = this.computeMockResult(this.columnsConfigs);
+            this.$set(this, 'columnsConfigs', columnsConfigs);
+
+
+            // 2. 相应数据 generateDataForm
+            let generateDataForm = this.getGenerateDataForm(columnsConfigs);
+            this.$set(this, 'generateDataForm', generateDataForm);
+        },
+        changeMockMethod: function () {
+            console.log(this.columnsConfigs)
+
+            let columnsConfigs = this.computeMockResult(this.columnsConfigs);
+            this.$set(this, 'columnsConfigs', columnsConfigs);
+
+            // 2. 相应数据 generateDataForm
+            let generateDataForm = this.getGenerateDataForm(columnsConfigs);
+            this.$set(this, 'generateDataForm', generateDataForm);
+        }
     },
 
     mounted: async function () {
         await this.initPage();
         this.initNav();
-        console.log(this.mock, 1111)
     }
 })
 

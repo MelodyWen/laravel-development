@@ -63,7 +63,7 @@ mock.categories = [
                     /**
                      * Random.range( start, stop, step )
                      */
-                    return Mock.Random.range(1, rowNum)
+                    return Mock.Random.range(1, rowNum + 1)
                 },
             },
         }
@@ -454,6 +454,25 @@ mock.categories = [
                 },
             },
         }
+    }, {
+        root_name: 'custom',
+        root_category: {
+            tel: {
+                name: 'tel',
+                method: function (rowNum) {
+                    let prefixArray = ["130", "131", "132", "133", "135", "137", "138", "170", "187", "189"];
+                    let i = parseInt(10 * Math.random());
+                    let prefix = prefixArray[i];
+
+                    for (let j = 0; j < 8; j++) {
+                        prefix = prefix + Math.floor(Math.random() * 10);
+                    }
+
+                    return prefix;
+                },
+            },
+
+        }
     }
 ];
 
@@ -488,7 +507,6 @@ mock.autoSelectMockType = function (column) {
     if (includeKeyword(['time'], column.COLUMN_TYPE)) {
         return 'time'
     }
-
 
     if (includeKeyword(['char'], column.COLUMN_TYPE)) {
         return 'ctitle'
