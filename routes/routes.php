@@ -13,9 +13,11 @@ Route::namespace('MelodyWen\LaravelDevelopment\Controllers')->prefix(config('dev
     Route::apiResource('/{module}/table-collections', 'TableCollectionsController');
 
     // 普通操作
-    Route::prefix('common')->group(function () {
+    Route::prefix('common')->name('common.')->group(function () {
 
         // 获取所有的数据表结构
-        Route::get('all', 'CommonController@all');
+        Route::get('all', 'CommonController@all')->name('all');
+
+        Route::post('mock-data', 'CommonController@mockData')->name('mock.data');
     });
 });

@@ -62,7 +62,7 @@ export default Vue.component('modules-index', {
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-offset-2 col-sm-10">
-                                            <button type="submit" class="btn btn-default">生成数据</button>
+                                            <button type="submit" class="btn btn-default" @click="submit">生成数据</button>
                                         </div>
                                     </div>
                                 </form>
@@ -315,6 +315,22 @@ mock result : {{ columnsConfig.mockResult }}
             // 2. 相应数据 generateDataForm
             let generateDataForm = this.getGenerateDataForm(columnsConfigs);
             this.$set(this, 'generateDataForm', generateDataForm);
+        },
+        submit: function () {
+            let that = this;
+            service({
+                url: '/common/mock-data',
+                method: 'post',
+                data: {
+                    builderGenerateForm: this.builderGenerateForm,
+                    generateDataForm: this.generateDataForm
+                }
+            }).then(function (response) {
+                that.$message({
+                    message: response.message,
+                    type: 'success'
+                });
+            })
         }
     },
 

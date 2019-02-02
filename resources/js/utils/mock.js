@@ -471,7 +471,12 @@ mock.categories = [
                     return prefix;
                 },
             },
-
+            null: {
+                name: 'null',
+                method: function (rowNum) {
+                    return '无';
+                },
+            },
         }
     }
 ];
@@ -494,7 +499,27 @@ mock.autoSelectMockType = function (column) {
 
     // 2. 关键字匹配
     if (includeKeyword(['title'], column.COLUMN_NAME)) {
+        return 'ctitle'
+    }
 
+    // 2. 关键字匹配
+    if (includeKeyword(['title'], column.COLUMN_NAME)) {
+        return 'ctitle'
+    }
+
+    if (includeKeyword(['person','name'], column.COLUMN_NAME)) {
+        return 'cname'
+    }
+
+    if (includeKeyword(['tel','mobile'], column.COLUMN_NAME)) {
+        return 'tel'
+    }
+
+    if (includeKeyword(['age'], column.COLUMN_NAME)) {
+        return 'natural'
+    }
+    if (includeKeyword(['create','update'], column.COLUMN_NAME)) {
+        return 'now'
     }
 
     // 3. 字段属性匹配
