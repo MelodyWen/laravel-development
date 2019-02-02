@@ -19,5 +19,10 @@ Route::namespace('MelodyWen\LaravelDevelopment\Controllers')->prefix(config('dev
         Route::get('all', 'CommonController@all')->name('all');
 
         Route::post('mock-data', 'CommonController@mockData')->name('mock.data');
+
+        Route::post('preview-php', 'CommonController@previewPhp')->name('preview.php');
+        Route::post('preview-js', 'CommonController@previewJs')->name('preview.js');
+        Route::post('preview-yml', 'CommonController@previewYml')->name('preview.yml');
+
     });
 });

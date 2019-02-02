@@ -74,13 +74,22 @@ export const constantRouterMap = [
                 },
             }, {
                 path: 'php',
-                meta: {title: 'php 数据格式'}
+                meta: {title: 'php 数据格式'},
+                component: async function () {
+                    return (await import('../views/builder/generate_php.js')).default
+                },
             }, {
                 path: 'js',
-                meta: {title: 'js 数据格式'}
+                meta: {title: 'js 数据格式'},
+                component: async function () {
+                    return (await import('../views/builder/generate_js.js')).default
+                },
             }, {
                 path: 'yml',
-                meta: {title: 'yml 数据格式'}
+                meta: {title: 'yml 数据格式'},
+                component: async function () {
+                    return (await import('../views/builder/generate_yml.js')).default
+                },
             }, {
                 path: 'swagger',
                 meta: {title: 'swagger 数据格式'}
