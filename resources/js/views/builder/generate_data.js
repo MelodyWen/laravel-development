@@ -44,6 +44,32 @@ export default Vue.component('modules-index', {
                 <div class="row">
                     <div class="col-xs-12">
                         <el-tabs type="border-card" tab-position="top">
+                        
+                             <el-tab-pane label="数据预览">                         
+                                <div style="width: 100%;overflow: scroll">
+                                    <table class="table table-bordered"><tbody>
+                                        <template v-if="builderGenerateForm.tableCollection.table != null">
+                                       
+                                            <tr>
+                                                <th v-for="(column,index) in builderGenerateForm.tableCollection.table.columns">
+                                                    {{column.COLUMN_NAME}}
+                                                </th>
+                                            </tr>
+                                            <template v-for="item in generateDataForm">
+                                                <tr>
+                                                     <td v-for="(column,index) in builderGenerateForm.tableCollection.table.columns"
+                                                        style="max-width:50em;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"
+                                                     >
+                                                        {{item[column.COLUMN_NAME]}}
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </template>
+                                    </tbody></table>
+                                </div>
+                             </el-tab-pane>
+                        
+                        
                              <el-tab-pane label="生成基本配置">
                                 <form class="form-horizontal" onclick="return false">
                                     <div class="form-group">
@@ -112,29 +138,7 @@ mock result : {{ columnsConfig.mockResult }}
                              </el-tab-pane>
                          
  
-                             <el-tab-pane label="数据预览">                         
-                                <div style="width: 100%;overflow: scroll">
-                                    <table class="table table-bordered"><tbody>
-                                        <template v-if="builderGenerateForm.tableCollection.table != null">
-                                       
-                                            <tr>
-                                                <th v-for="(column,index) in builderGenerateForm.tableCollection.table.columns">
-                                                    {{column.COLUMN_NAME}}
-                                                </th>
-                                            </tr>
-                                            <template v-for="item in generateDataForm">
-                                                <tr>
-                                                     <td v-for="(column,index) in builderGenerateForm.tableCollection.table.columns"
-                                                        style="max-width:50em;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"
-                                                     >
-                                                        {{item[column.COLUMN_NAME]}}
-                                                    </td>
-                                                </tr>
-                                            </template>
-                                        </template>
-                                    </tbody></table>
-                                </div>
-                             </el-tab-pane>
+                            
                         </el-tabs>
                     </div>
                 </div>

@@ -44,6 +44,13 @@ export default Vue.component('modules-index', {
                 <div class="row">
                     <div class="col-xs-12">
                         <el-tabs type="border-card" tab-position="top">
+                             
+                             <el-tab-pane label="数据预览">                         
+                                <div style="width: 100%;overflow: scroll">
+                                    <pre>{{ previewData }}</pre>
+                                </div>
+                             </el-tab-pane>
+                             
                              <el-tab-pane label="生成基本配置">
                                 <form class="form-horizontal" onclick="return false">
                                     <div class="form-group">
@@ -62,11 +69,7 @@ export default Vue.component('modules-index', {
                                     </div>
                                 </form>
                              </el-tab-pane>
-                             <el-tab-pane label="数据预览">                         
-                                <div style="width: 100%;overflow: scroll">
-                                    <pre>{{ previewData }}</pre>
-                                </div>
-                             </el-tab-pane>
+                             
                         </el-tabs>
                     </div>
                 </div>
@@ -128,6 +131,16 @@ export default Vue.component('modules-index', {
                 }
 
                 let that = this;
+                // 节流
+                let rowNum = this.builderGenerateForm.rowNum;
+                await  new Promise((resolve) => {
+                    setTimeout(resolve, 500);
+                });
+
+                if(rowNum !== this.builderGenerateForm.rowNum ){
+                    return false
+                }
+
                 service({
                     url: '/common/preview-js',
                     method: 'post',

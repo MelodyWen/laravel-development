@@ -95,31 +95,7 @@ export const constantRouterMap = [
                 meta: {title: 'swagger 数据格式'}
             }
         ]
-    },
-
-    {
-        path: '/nested',
-        component: Layout,
-        redirect: '/nested/menu1',
-        name: 'Nested',
-        meta: {
-            title: 'Nested',
-            icon: 'el-icon-star-on'
-        },
-        children: [
-            {
-                path: 'menu1',
-                // component: () => import('@/views/nested/menu1/index'), // Parent router-view
-                name: 'Menu1',
-                meta: {title: 'Menu1'},
-            },
-            {
-                path: 'menu2',
-                // component: () => import('@/views/nested/menu2/index'),
-                meta: {title: 'menu2'}
-            }
-        ]
-    },
+    }
 ]
 
 console.log('框架加载：router complete')
