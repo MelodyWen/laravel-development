@@ -6,6 +6,7 @@ namespace MelodyWen\LaravelDevelopment\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MelodyWen\LaravelDevelopment\Models\Table;
+use Symfony\Component\Yaml\Yaml;
 
 class CommonController extends Controller
 {
@@ -60,7 +61,14 @@ class CommonController extends Controller
 
     public function previewYml(Request $request)
     {
+        $tableName = $request['builderGenerateForm']['tableCollection']['collection_name'];
+        $rowNum = $request['builderGenerateForm']['rowNum'];
 
+        $result = DB::table($tableName)->limit($rowNum)->get();
+
+        $result = self::toArray($result);
+
+        return $this->success(Yaml::dump($result, 2));
     }
 
     /**
@@ -144,6 +152,16 @@ class CommonController extends Controller
     public static function toObject($param)
     {
         return json_decode(json_encode($param), false);
+    }
+
+    /**
+     * 数组转对象
+     * @param $param
+     * @return mixed
+     */
+    public static function toArray($param)
+    {
+        return json_decode(json_encode($param), true);
     }
 
     /**
