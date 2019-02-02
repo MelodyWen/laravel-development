@@ -13,6 +13,7 @@
 <script src="{{ config('development.cdn_assets.foot_js.vue_store') }}"></script>
 <script src="{{ config('development.cdn_assets.foot_js.axios') }}"></script>
 <script src="{{ config('development.cdn_assets.foot_js.nprogress') }}"></script>
+<script src="{{ config('development.cdn_assets.foot_js.mock') }}"></script>
 
 <!-- 加载入口文件 -->
 {{--<script src="{{ url('vendor/development/js/route.js') }}"></script>--}}

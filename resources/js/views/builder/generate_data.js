@@ -1,4 +1,5 @@
 import service from './../../utils/request.js';
+import mock from './../../utils/mock.js';
 
 export default Vue.component('modules-index', {
     template: `
@@ -66,8 +67,50 @@ export default Vue.component('modules-index', {
                                     </div>
                                 </form>
                              </el-tab-pane>
-                             <el-tab-pane label="配置字段">配置字段</el-tab-pane>
-                             
+                             <el-tab-pane label="配置字段">
+                      
+                      
+                                <el-tabs tab-position="left">
+                                    <template v-for="columnsConfig in columnsConfigs">
+                                    <el-tab-pane :label="columnsConfig.column.COLUMN_NAME">
+                                        <el-container>
+                                        
+<!--内容区域的 头部， 用来选择 mock 数据的 具体类别-->
+<el-header style="height: 150px;overflow: scroll">
+
+     <div class="el-row" v-for="category in  mock.categories">
+        <el-col :span="24"><h5>{{ category.root_name }}</h5></el-col>
+        <el-col :span="24">
+            <el-button type="text" v-for="(child,childIndex) in  category.root_category" :key="childIndex">
+                {{ child.name }}
+            </el-button>
+        </el-col>
+     </div>
+     
+</el-header>
+
+<!--实际的出来的结果如下所示-->
+<el-main>
+    <h5> 运行的代码如下所示 ：<el-button type="success" size="mini">再次运行</el-button> </h5>
+    <textarea  rows="10" style="background: #fafafa;width: 100%;border-radius: 10px">
+                {{columnsConfig.mockCode}}</textarea>
+    <h5> 具体的结果展示 (mock type:  {{ columnsConfig.mockType }}) </h5>
+     <pre style="background: #fafafa">
+mock result : {{ columnsConfig.mockResult }}
+    </pre>
+</el-main>
+                                            
+                                        </el-container>
+                                        
+                                    </el-tab-pane>
+                                    </template>
+                                    
+                                </el-tabs>
+                                                             
+                              
+                             </el-tab-pane>
+                         
+ 
                              <el-tab-pane label="数据预览">                         
                                 <div style="width: 100%;overflow: scroll">
                                     <table class="table table-bordered"><tbody>
@@ -99,6 +142,7 @@ export default Vue.component('modules-index', {
     `,
     data() {
         return {
+            mock: mock,
             modules: [],
             navForm: {
                 moduleId: undefined,
@@ -108,6 +152,9 @@ export default Vue.component('modules-index', {
                 tableCollection: {},
                 rowNum: 10,
             },
+            columnsConfigs: [
+                // {column: {},mockType: '', mockCode: {}, mockResult: [],}
+            ],
             generateDataForm: [],
         }
     },
@@ -149,23 +196,29 @@ export default Vue.component('modules-index', {
                 if (!this.builderGenerateForm.tableCollection) {
                     return;
                 }
-                let generateDataForm = [];
-                for (let i = 0; i < newVal.rowNum; i++) {
-                    let row = collect(this.builderGenerateForm.tableCollection.table.columns).map(function (item) {
-                        return {[item.COLUMN_NAME]: null,}
-                    }).reduce(function (carry, item) {
-                        if (!carry) {
-                            carry = {}
-                        }
-                        return {...carry, ...item};
-                    });
-                    generateDataForm.push(row)
-                }
+                // 1. 相应数据 columnsConfigs
+                let columnsConfigs = collect(this.builderGenerateForm.tableCollection.table.columns).map(function (item) {
+                    let response = {
+                        column: item,
+                        mockType: mock.autoSelectMockType(item),
+                        mockCode: '',
+                        mockResult: [],
+                    };
+                    response.mockCode = mock.getMethodCode(response.mockType)
+
+                    return response;
+                }).toArray();
+                columnsConfigs = this.computeMockResult(columnsConfigs);
+                this.$set(this, 'columnsConfigs', columnsConfigs);
+
+
+                // 2. 相应数据 generateDataForm
+                let generateDataForm = this.getGenerateDataForm(columnsConfigs);
                 this.$set(this, 'generateDataForm', generateDataForm);
+
             },
             deep: true
         }
-
     },
     methods: {
         /**
@@ -197,11 +250,52 @@ export default Vue.component('modules-index', {
 
             that.$set(that, 'modules', response);
         },
+        computeMockResult: function (columnsConfigs) {
+            let that = this;
+            columnsConfigs = collect(columnsConfigs).map(function (item) {
+
+                if (typeof item.mockCode != "function") {
+                    return item
+                }
+
+                if (item.mockType === 'range') {
+                    item.mockResult = item.mockCode(that.builderGenerateForm.rowNum)
+                    return item;
+                }
+
+                for (let i = 0; i < that.builderGenerateForm.rowNum; i++) {
+                    item.mockResult.push(item.mockCode(that.builderGenerateForm.rowNum))
+                }
+
+                return item;
+            }).toArray()
+
+            return columnsConfigs
+        },
+        getGenerateDataForm: function () {
+            let that = this;
+            let generateDataForm = [];
+
+            for (let i = 0; i < this.builderGenerateForm.rowNum; i++) {
+                let row = collect(this.builderGenerateForm.tableCollection.table.columns).map(function (item) {
+                    let val = collect(that.columnsConfigs).where('column.COLUMN_NAME', item.COLUMN_NAME).first()
+
+                    return {[item.COLUMN_NAME]: val.mockResult[i]}
+                }).reduce(function (carry, item) {
+                    return {...carry, ...item};
+                });
+                generateDataForm.push(row)
+            }
+
+            return generateDataForm;
+        }
+
     },
 
     mounted: async function () {
         await this.initPage();
         this.initNav();
+        console.log(this.mock, 1111)
     }
 })
 
