@@ -268,6 +268,7 @@ mock result : {{ columnsConfig.mockResult }}
 
                 if (item.mockType === 'range') {
                     item.mockResult = item.mockCode(that.builderGenerateForm.rowNum)
+
                     return item;
                 }
                 item.mockResult = [];

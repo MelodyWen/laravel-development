@@ -63,6 +63,10 @@ mock.categories = [
                     /**
                      * Random.range( start, stop, step )
                      */
+                    rowNum = parseInt(rowNum);
+
+                    rowNum = isNaN(rowNum) ? 0 : rowNum;
+
                     return Mock.Random.range(1, rowNum + 1)
                 },
             },
@@ -507,18 +511,18 @@ mock.autoSelectMockType = function (column) {
         return 'ctitle'
     }
 
-    if (includeKeyword(['person','name'], column.COLUMN_NAME)) {
+    if (includeKeyword(['person', 'name'], column.COLUMN_NAME)) {
         return 'cname'
     }
 
-    if (includeKeyword(['tel','mobile'], column.COLUMN_NAME)) {
+    if (includeKeyword(['tel', 'mobile'], column.COLUMN_NAME)) {
         return 'tel'
     }
 
     if (includeKeyword(['age'], column.COLUMN_NAME)) {
         return 'natural'
     }
-    if (includeKeyword(['create','update'], column.COLUMN_NAME)) {
+    if (includeKeyword(['create', 'update'], column.COLUMN_NAME)) {
         return 'now'
     }
 
