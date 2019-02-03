@@ -92,7 +92,10 @@ export const constantRouterMap = [
                 },
             }, {
                 path: 'swagger',
-                meta: {title: 'swagger 数据格式'}
+                meta: {title: 'swagger 数据格式'},
+                component: async function () {
+                    return (await import('../views/builder/generate_swagger.js')).default
+                },
             }
         ]
     }

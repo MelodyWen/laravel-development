@@ -5,6 +5,7 @@ namespace MelodyWen\LaravelDevelopment\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use MelodyWen\LaravelDevelopment\Models\Table;
 use Symfony\Component\Yaml\Yaml;
 
@@ -69,6 +70,135 @@ class CommonController extends Controller
         $result = self::toArray($result);
 
         return $this->success(Yaml::dump($result, 2));
+    }
+
+    public function previewSwagger(Request $request)
+    {
+        $table = $request['builderGenerateForm']['tableCollection']['table'];
+        $primaryKey = collect($table['columns'])->filter(function ($item) {
+
+            return $item['COLUMN_KEY'] == 'PRI';
+        })->first()['COLUMN_NAME'];
+
+        $model = DB::table($table['TABLE_NAME'])
+            ->where($primaryKey, '>=', $request['builderGenerateForm']['rowNum'])
+            ->first();
+
+        $schema = [
+            'schema' => null,
+            'title' => null,
+            'description' => null,
+            'type' => 'object',
+            'required' => [],
+            'property' => [
+                [
+                    'property' => null,
+                    'type' => null,
+                    'readOnly' => null,
+                    'default' => null,
+                    'example' => null,
+                    'nullable' => null,
+                    'deprecated' => null,
+                    'description' => null,
+                ]
+            ],
+        ];
+
+
+        $schema['schema'] = Str::studly(Str::camel($table['TABLE_NAME']));
+        $schema['title'] = $schema['schema'] . ' Basic Model';
+        $schema['description'] = $table['TABLE_COMMENT'];
+
+        collect($table['columns'])->map(function ($item, $key) use (&$schema, $model) {
+            $item = self::toObject($item);
+
+            $schema['property'][$key]['property'] = $item->COLUMN_NAME;
+
+            if (strpos($item->COLUMN_TYPE, 'int') !== false) {
+                $schema['property'][$key]['type'] = 'integer';
+            } else if (strpos($item->COLUMN_TYPE, 'double') !== false ||
+                strpos($item->COLUMN_TYPE, 'float') !== false ||
+                strpos($item->COLUMN_TYPE, 'decimal') !== false ||
+                strpos($item->COLUMN_TYPE, 'numeric') !== false
+            ) {
+                $schema['property'][$key]['type'] = 'float';
+            } else if (strpos($item->COLUMN_TYPE, 'text') !== false ||
+                strpos($item->COLUMN_TYPE, 'char') !== false) {
+                $schema['property'][$key]['type'] = 'string';
+            } else if (strpos($item->COLUMN_TYPE, 'time') !== false) {
+                $schema['property'][$key]['type'] = 'dateTime';
+            } else if (strpos($item->COLUMN_TYPE, 'date') !== false) {
+                $schema['property'][$key]['type'] = 'date';
+            } else if (strpos($item->COLUMN_TYPE, 'json') !== false) {
+                $schema['property'][$key]['type'] = 'object';
+            }
+
+            $schema['property'][$key]['default'] = $item->COLUMN_DEFAULT;
+
+            if ($model) {
+                $tmp = $item->COLUMN_NAME;
+                $schema['property'][$key]['example'] = $model->$tmp;
+            }
+
+            $schema['property'][$key]['nullable'] = $item->IS_NULLABLE == "YES" ? true : false;
+
+            if (!$schema['property'][$key]['nullable']) {
+                $schema['required'][] = $item->COLUMN_NAME;
+            }
+
+            $schema['property'][$key]['deprecated'] = false;
+            $schema['property'][$key]['readOnly'] = false;
+            $schema['property'][$key]['description'] = $item->COLUMN_COMMENT;
+
+        });
+
+        $response[] = "@OA\Schema(\n";
+        $response[] = $this->tabStr(1) . 'schema=' . self::valueView($schema['schema']) . ",\n";
+        $response[] = $this->tabStr(1) . 'title=' . self::valueView($schema['title']) . ",\n";
+        $response[] = $this->tabStr(1) . 'description=' . self::valueView($schema['description']) . ",\n";
+        $response[] = $this->tabStr(1) . 'type=' . self::valueView($schema['type']) . ",\n";
+        $response[] = $this->tabStr(1) . 'required={"' . implode('","', $schema['required']) . "\"},\n";
+
+
+        foreach ($schema['property'] as $item) {
+            $tmp = $this->tabStr(1) . "@OA\Property(\n";
+
+            array_push($response, $tmp);
+
+            if ($item['type'] != 'object') {
+                $tmp = $this->tabStr(2) . 'property=' . self::valueView($item['property']) . ', ';
+                $tmp .= 'type=' . self::valueView($item['type']) . ', ';
+                $tmp .= 'default=' . self::valueView($item['default']) . ', ';
+                $tmp .= 'example=' . self::valueView($item['example']) . ",\n";
+                array_push($response, $tmp);
+
+                $tmp = $this->tabStr(2) . 'nullable=' . self::valueView($item['nullable']) . ', ';
+                $tmp .= 'readOnly=' . self::valueView($item['readOnly']) . ', ';
+                $tmp .= 'deprecated=' . self::valueView($item['deprecated']) . ', ';
+                $tmp .= 'description=' . self::valueView($item['description']) . "\n";
+                array_push($response, $tmp);
+            } else {
+                $tmp = $this->tabStr(2) . 'property=' . self::valueView($item['property']) . ', ';
+                $tmp .= 'type=' . self::valueView($item['type']) . ",\n";
+                array_push($response, $tmp);
+
+                $tmp = $this->tabStr(2) . "@OA\Property()\n";
+                array_push($response, $tmp);
+            }
+
+
+            $tmp = $this->tabStr(1) . "),\n";
+            array_push($response, $tmp);
+        }
+
+        $response[] = ")\n";
+        $response = array_map(function ($item) {
+            return ' * ' . $item;
+        }, $response);
+        array_unshift($response, "/** \n");
+        array_push($response, " */\n");
+
+        return $this->success(implode("", $response));
     }
 
     /**
@@ -182,5 +312,14 @@ class CommonController extends Controller
         }
 
         return null;
+    }
+
+    private function tabStr($count = 1)
+    {
+        $response = '';
+        for ($i = 0; $i < $count * 4; $i++) {
+            $response .= ' ';
+        }
+        return $response;
     }
 }

@@ -23,6 +23,6 @@ Route::namespace('MelodyWen\LaravelDevelopment\Controllers')->prefix(config('dev
         Route::post('preview-php', 'CommonController@previewPhp')->name('preview.php');
         Route::post('preview-js', 'CommonController@previewJs')->name('preview.js');
         Route::post('preview-yml', 'CommonController@previewYml')->name('preview.yml');
-
+        Route::post('preview-swagger', 'CommonController@previewSwagger')->name('preview.swagger');
     });
 });
