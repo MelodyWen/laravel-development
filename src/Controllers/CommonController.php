@@ -27,12 +27,22 @@ class CommonController extends Controller
             return $item['COLUMN_KEY'] == 'PRI';
         })->first()['COLUMN_NAME'];
 
-        $creates = collect($request['generateDataForm']);
+        $creates = collect($request['generateDataForm'])->map(function ($item) {
+            return collect($item)->map(function ($item, $key) {
+                if (is_object($item) || is_array($item)) {
+                    return json_encode($item);
+                }
+                return $item;
+            })->toArray();
+        });
+
 
         // 2. 操作
+
         DB::table($tableName)
             ->whereIn($primaryKey, $creates->pluck($primaryKey))
             ->delete();
+
 
         DB::table($tableName)->insert($creates->toArray());
 

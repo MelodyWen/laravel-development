@@ -481,6 +481,12 @@ mock.categories = [
                     return null;
                 },
             },
+            json: {
+                name: 'json',
+                method: function (rowNum) {
+                    return {};
+                },
+            },
         }
     }
 ];
@@ -549,6 +555,10 @@ mock.autoSelectMockType = function (column) {
     }
     if (includeKeyword(['decimal', ',numeric'], column.COLUMN_TYPE)) {
         return 'float'
+    }
+
+    if (includeKeyword(['json'], column.COLUMN_TYPE)) {
+        return 'json'
     }
 
     return null
