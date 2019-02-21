@@ -15,36 +15,36 @@ export default Vue.component('modules-index', {
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <el-tabs type="border-card" tab-position="left">
+                        <el-tabs type="border-card" tab-position="top">
                             <el-tab-pane :key="key" v-for="(module,key) in modules" :label="module.sort +'. '+ module.collection_name"> 
                                 
                                 <el-table :data="module.table_collections">
                                     
                                     <el-table-column type="expand">
                                         <template slot-scope="props">
-                                            
+                                            <div style="width: 100%">
                                             <el-table :data="props.row.table.columns" style="width: 100%;" :row-class-name="tableRowClassName">
-                                                <el-table-column width="150" prop="COLUMN_NAME" label="列名" fixed></el-table-column>
-                                                <el-table-column width="120" prop="COLUMN_TYPE" label="列的定义类型"></el-table-column>
+                                                <el-table-column width="230" prop="COLUMN_NAME" label="列名"></el-table-column>
+                                                <el-table-column width="150" prop="COLUMN_TYPE" label="列的定义类型"></el-table-column>
                                                 
                                                 <el-table-column width="70" prop="COLUMN_KEY" label="索引列"></el-table-column>
                                                 <el-table-column width="70" prop="IS_NULLABLE" label="is null"></el-table-column>
                                                 <el-table-column width="70" prop="COLUMN_DEFAULT" label="默认值"></el-table-column>
-                                                <el-table-column width="300" prop="COLUMN_COMMENT" label="备注"></el-table-column>
+                                                <el-table-column width="500" prop="COLUMN_COMMENT" label="备注"></el-table-column>
                                                 
                                                 <el-table-column width="100" prop="DATA_TYPE" label="数据类型"></el-table-column>
                                                 <el-table-column width="100" prop="CHARACTER_MAXIMUM_LENGTH" label="字符-长度"></el-table-column>
                                                 <el-table-column width="80" prop="NUMERIC_PRECISION" label="数字长度"></el-table-column>
                                                 <el-table-column width="80" prop="NUMERIC_SCALE" label="数字精度"></el-table-column>
                                                 <el-table-column width="100" prop="DATETIME_PRECISION" label="时间-精度"></el-table-column>
-                                                <el-table-column width="70" prop="CHARACTER_SET_NAME" label="字符集"></el-table-column>
-                                                <el-table-column width="120" prop="COLLATION_NAME" label="校对规则"></el-table-column>
+                                                <el-table-column width="120" prop="CHARACTER_SET_NAME" label="字符集"></el-table-column>
+                                                <el-table-column width="150" prop="COLLATION_NAME" label="校对规则"></el-table-column>
                                                 
                                                 <el-table-column width="250" prop="EXTRA" label="额外信息"></el-table-column>
                                                 <el-table-column width="300" prop="GENERATION_EXPRESSION" label="计算表达式"></el-table-column>
                                                 
                                             </el-table>
-                                          
+                                            </div>
                                         </template>
                                     </el-table-column>
                                     
